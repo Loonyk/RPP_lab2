@@ -21,9 +21,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-//        Sleep sleep = new Sleep(this);
-//        sleep.start();
-
         RetrofitClass.getInstance()
                 .getJSON()
                 .getJSONClass()
@@ -32,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(Call<List<JSONClass>> call, Response<List<JSONClass>> response) {
                         if (response.isSuccessful()) {
                             jsonItem = response.body();
-                            jsonItem.remove(0); //removing first JSON object that not match to Ancient Technology
+                            jsonItem.remove(0); //удаления первого объекта json
                             openNewActivity();
                         }
                     }
@@ -40,16 +37,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<List<JSONClass>> call, Throwable t) {
                         try {
-                            Thread.sleep(3000); //thread sleeps for memory economy on .clone() (when internet connection lost)
+                            Thread.sleep(3000); //если нет интернета, поток засыпает
                         } catch (InterruptedException e) { }
                         call.clone().enqueue(this); //retry request
                     }
                 });
-
-
-
-
-
     }
 
     public void openNewActivity(){
